@@ -1,0 +1,43 @@
+// ==UserScript==
+// @name         Ads?Nty.
+// @namespace    http://tampermonkey.net/
+// @version      1.0
+// @description  Automatically closes any pop ups.
+// @author       Mark Moore
+// @match        *://*/*
+// @grant        none
+// ==/UserScript==
+
+(function() {
+    'use strict';
+
+    // Function to close any pop-up or modal
+    function closePopups() {
+        // Select common modal or pop-up classes
+        const popupSelectors = [
+            '.modal',      // Bootstrap modals
+            '.popup',      // Generic pop-up class
+            '.overlay',    // Overlay modals
+            '.lightbox',   // Lightbox galleries
+            '[role="dialog"]', // ARIA role for dialogs
+        ];
+
+        // Loop through each selector and close the elements if found
+        popupSelectors.forEach(selector => {
+            const popups = document.querySelectorAll(selector);
+            popups.forEach(popup => {
+                // Check if the popup is visible
+                if (getComputedStyle(popup).display !== 'none') {
+                    popup.style.display = 'none'; // Close it
+                }
+            });
+        });
+    }
+
+    // Monitor for click events
+    document.addEventListener('click', function(event) {
+        // Set a timeout to allow pop-ups to appear
+        // You can edit this depending on how quick you want the website to load.
+        setTimeout(closePopups, 100);
+    });
+})();
